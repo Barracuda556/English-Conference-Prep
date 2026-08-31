@@ -1,10 +1,11 @@
 #!/bin/bash
-# Decode original Word files from base64
+set -e
 mkdir -p docx
-for f in docx_base64/*.b64; do
-  [ -f "$f" ] || continue
-  base=$(basename "$f" .b64)
-  base64 -d "$f" > "docx/$base"
-  echo "Created docx/$base"
+cd docx_base64
+for base in "План_уроков_на_месяц.docx" "Полный_словарик_для_конференции.docx" "Методичка_к_плану_уроков.docx"; do
+  if ls ${base}.b64.part* 1>/dev/null 2>&1; then
+    cat ${base}.b64.part* | base64 -d > ../docx/${base}
+    echo "OK: docx/${base}"
+  fi
 done
-echo "Done. Open the files in the docx/ folder with Microsoft Word or LibreOffice."
+echo "All done. Files are in docx/"
